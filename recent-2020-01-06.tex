@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage{xeCJK}
+\usepackage{amsmath}
+\usepackage{semantic}
+\setCJKmainfont{更纱黑体 SC}
+\setCJKmonofont{等距更纱黑体 SC}
+
+\author{emliunix}
+\title{Lambda, Haskel, etc}
+\date{2020/01/06}
+
+\begin{document}
+
+\maketitle
+
+\section*{最近}
+
+好久没写东西了，也好久没用中文了。最近用Haskell写了些东西，还是半成的，但是也积累了些实践经验。
+其中有些不清楚的地方，为了更加明确，又看了些基本的$\lambda$演算，以及类型系统。
+理解了些东西，又有了很多不理解的东西。
+
+\section*{Typeclass}
+
+首先，赞美Typeclass。用过OCaml的Functor，Haskell的Typeclass，更不用说OO的对象系统了。
+总体感觉Typeclass是最趁手的。简短的来说，Typeclass提供了一种轻量又灵活的抽象方式。
+Haskell中最为出名的Monad（以及Functor，Applicative，etc）都是以Typeclass定义的。
+它也衍生出Scala的implicits，Rust的trait。
+Ad-hoc polymorphism是很常见的一种需求，OO的话，就需要定义接口，
+实现（实现在类型定义侧，无法独立出来，不够灵活），也没有\emph{自动实现}，约束（Constraint）的能力。
+而且，OO（Java）总有种涛涛废话东流水的感觉。
+
+对于\emph{自动实现}，我指Haskell中存在这些定义：{\tt instance F a => F (List a) where }或者{\tt instance F a => G a where}。
+它的作用范围是所有符合要求的类型。而OO中，尚未见识过类似于这种作用于接口上的接口定义。
+
+Functor的问题在于显式，因此失去了隐式带来的灵活性。在使用侧，模块需要一步步构造出来。代码量就多了，
+而且代码因为被固定于具体的类型，失去了通用性。
+
+所以Haskell的代码相比就足够抽象，因此足够通用，于是足够灵活，能更多的与其他代码组合。
+
+\section*{语言的内容}
+
+到底什么组成了一个编程语言。比如Typeclass是怎么工作的呢。
+
+所有人都知道$\lambda$演算，也说他是Haskell，OCaml等等常见函数式编程语言的基础，
+但是很明显$\lambda$演算和Haskell怕不是隔着好几百个Java。GADTs，Typeclass怎么跑到$\lambda$的。
+
+简单来说Haskell代码编译到Core（System F$\omega$）之后就已经没有GADTs，Typeclass这些了。所以，
+至少这两个部分是在Typechecker，Typeinferer这里做的，转换到了Core，并且丢失了一部分信息，
+或者说特化了。这种从Surface Language到Core Language的转换过程，如果我没理解错的话，
+一般称之为elaborate。
+
+不过这不影响他们是Haskell本身的一个语言（Surface Language）特性，所以从语言模型上来讲，也有着他们的rules。
+$\lambda$ cube定义了三种对简单类型的扩展以及这些扩展的组合，但是这只是在类型系统上对语言的扩展。
+如ADT构造，if-else，pattern matching这些结构上的扩展也是扩展。
+
+实用的编程语言都是复杂的，有各种各样的结构来提供便利，同时我们又希望他的基础是足够通用与简单的，
+这样一方面减轻使用者的负担，另一方面利于发展。这件事情是很难的。
+
+\end{document}

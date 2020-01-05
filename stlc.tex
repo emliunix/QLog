@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{xeCJK}
+\usepackage{amsmath}
+\usepackage{semantic}
+\setCJKmainfont{更纱黑体 SC}
+
+\mathlig{|>}{\triangleright}
+
+\begin{document}
+
+\section*{Simply Typed Lambda Calculus}
+
+I'll list all the inference rules for STLC and try to add extensions to it. \par
+
+And the style used to define the STLC and other lambda calculus systems and
+even most of the programming languages is \textbf{Hilbert style formal theories}.
+A (Hilbert-style) \textit{formal theory T} consists of three sets: \textit{formulas},
+\textit{axioms} and \textit{rules} (of inference). \par
+
+Note: the \textit{rule}, as defined, has \emph{1+} premises and \emph{1} conclusion.
+And we can see \textit{axioms} as also rules with \emph{0} premises.
+
+$$
+\begin{aligned}
+    & \inference[$-> e,app$]{M:\sigma->\tau & N:\sigma}{MN:\tau} \\
+    & \inference[$-> i,abs$]{\Gamma,x:\sigma\vdash M:\tau}{(\lambda x.M):\sigma->\tau} \\
+    & \inference[$\equiv_\alpha'$]{M:\tau & M\equiv_\alpha N}{N:\tau}
+\end{aligned}
+$$
+
+\subsection*{$\lambda\beta$: formal theory of $\beta\!-\!\text{equality}$}
+
+Formulas: $M = N$.
+
+Axioms:
+$$
+\begin{aligned}
+    & \inference[$\alpha$]{}{\lambda x.M = \lambda y.[y/x]M\;\text{if}\;y \notin FV(M)} \\
+    & \inference[$\beta$]{}{(\lambda x.M)N = [N/x]M} \\
+    & \inference[$\rho$]{}{M=M}
+\end{aligned}
+$$
+
+Rules:
+$$
+\begin{aligned}
+    & \inference[$\mu$]{M=M'}{NM=NM'} \\
+    & \inference[$\nu$]{M=M'}{MN=M'N} \\
+    & \inference[$\xi$]{M=M'}{\lambda x.M=\lambda x.M'} \\
+    & \inference[$\tau$]{M=N & N=P}{M=P} \\
+    & \inference[$\tau$]{M=N & N=P}{M=P} \\
+    & \inference[$\sigma$]{M=N}{N=M} \\
+\end{aligned}
+$$
+
+\subsection*{$\lambda\beta$: formal theory of $\beta\!-\!\text{reduction}$}
+
+Formulas: $M|>N$.
+
+Axioms and rules are the same as $\beta\!-\!\text{equality}$,
+with $=$ replaced by $|>$ and omission of rule $\sigma$.
+
+And on writing:
+$$
+\begin{aligned}
+    & \lambda\beta \vdash M|>N \;\text{means it's provable under }\lambda\beta \\
+    & M |>_\beta N \iff \lambda\beta \vdash M|>N \\
+    & M =_\beta N \iff \lambda\beta \vdash M=N \\
+\end{aligned}
+$$
+
+\end{document}
